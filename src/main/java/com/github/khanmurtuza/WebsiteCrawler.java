@@ -23,7 +23,8 @@ public class WebsiteCrawler implements Crawler {
     }
 
     public Document getDocument(final String link) throws IOException {
-        return Jsoup.connect(link).get();
+        return Jsoup.connect(link).followRedirects(true).get();
+//        return Jsoup.connect(link).get();
     }
 
     public boolean shouldCrawl(final String link) {
