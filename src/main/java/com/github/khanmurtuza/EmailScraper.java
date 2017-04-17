@@ -45,12 +45,19 @@ public class EmailScraper {
 
         while (!linksToCrawl.isEmpty()) {
             final String linkToCrawl = linksToCrawl.poll();
+//            System.out.println("linkToCrawl: " + linkToCrawl);
 
             try {
                 final Document document = crawler.getDocument(linkToCrawl);
 
+                Set<String> newEmails = getEmails(document);
+                for (String newEmail : newEmails) {
+                    if (!allEmails.contains(newEmail)) {
+                        System.out.println(newEmail);
+                    }
+                }
                 // add emails found in current page
-                allEmails.addAll(getEmails(document));
+                allEmails.addAll(newEmails);
 
                 // get all unique links found in current page
                 addLinksToCrawler(getLinks(document));
@@ -121,9 +128,13 @@ public class EmailScraper {
             System.exit(1);
         }
 
-        final EmailScraper emailScraper = new EmailScraper(new WebsiteCrawler(formattedInputUrl));
-        for (final String link : emailScraper.getAllEmails(formattedInputUrl)) {
-            System.out.println(link);
+        try {
+            final EmailScraper emailScraper = new EmailScraper(new WebsiteCrawler(formattedInputUrl));
+            for (final String link : emailScraper.getAllEmails(formattedInputUrl)) {
+//            System.out.println(link);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 
